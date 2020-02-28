@@ -20,6 +20,7 @@ bool Trip::insert_city(City& city, size_t index)
 	}
 
 	trip_.insert(trip_.begin() + index, city);
+	return true;
 }
 
 void Trip::randomize_trip()

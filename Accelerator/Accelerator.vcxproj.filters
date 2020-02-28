@@ -24,12 +24,18 @@
     <ClCompile Include="Trip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Population.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="City.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Trip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Population.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
