@@ -1,9 +1,5 @@
 #include "City.h"
 
-City::City() : City(0, 0, 0)
-{
-}
-
 City::City(unsigned int id, double x, double y) :
 	id_{id},
 	x_{x},

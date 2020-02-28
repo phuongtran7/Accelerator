@@ -9,7 +9,7 @@ private:
 	double x_;
 	double y_;
 public:
-	City();
+	City() = delete;
 	City(unsigned int id, double x, double y);
 	~City() = default;
 	double get_x();
