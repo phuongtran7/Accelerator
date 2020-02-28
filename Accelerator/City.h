@@ -5,16 +5,16 @@
 class City
 {
 private:
-	unsigned int id_;
+	size_t id_;
 	double x_;
 	double y_;
 public:
 	City() = delete;
-	City(unsigned int id, double x, double y);
+	City(size_t id, double x, double y);
 	~City() = default;
 	double get_x();
 	double get_y();
-	unsigned int get_id();
+	size_t get_id();
 	double distance_to(const City& another);
 };
 

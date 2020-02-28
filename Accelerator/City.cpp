@@ -1,6 +1,6 @@
 #include "City.h"
 
-City::City(unsigned int id, double x, double y) :
+City::City(size_t id, double x, double y) :
 	id_{id},
 	x_{x},
 	y_{y}
@@ -17,7 +17,7 @@ double City::get_y()
 	return y_;
 }
 
-unsigned int City::get_id()
+size_t City::get_id()
 {
 	return id_;
 }
