@@ -160,7 +160,6 @@ void Population::cross_over()
 		mutate(population_.at(parent_1));
 		mutate(population_.at(parent_2));
 	}
-
 }
 
 std::vector<std::string> Population::split_string(const std::string& input)
