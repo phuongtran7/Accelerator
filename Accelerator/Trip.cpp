@@ -23,6 +23,21 @@ bool Trip::insert_city(City& city, size_t index)
 	return true;
 }
 
+bool Trip::replace_city(City& city, size_t index)
+{
+	if (index > trip_.size()) {
+		return false;
+	}
+
+	trip_.at(index) = city;
+	return true;
+}
+
+void Trip::add_city(City& city)
+{
+	trip_.push_back(city);
+}
+
 void Trip::randomize_trip()
 {
 	std::random_device rd;
@@ -34,9 +49,24 @@ double Trip::get_fitness()
 {
 	auto total_distance = get_total_distance();
 	if (total_distance != 0.0) {
-		return (1.0 / total_distance);
+		auto t = 1.0 / total_distance;
+		return (t);
 	}
 	return 0.0;
+}
+
+bool Trip::swap_city(size_t first, size_t second)
+{
+	if (first >= trip_.size() || second >= trip_.size()) {
+		return false;
+	}
+	std::swap(trip_.at(first), trip_.at(second));
+	return true;
+}
+
+size_t Trip::get_trip_size()
+{
+	return trip_.size();
 }
 
 double Trip::get_total_distance()
