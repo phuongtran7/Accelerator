@@ -23,7 +23,7 @@ public:
 	void start_next_generation();
 	void report_data();
 private:
-	void mutate();
+	void mutate(Trip& city);
 	void cross_over();
 	std::vector<std::string> split_string(const std::string& input);
 	Trip get_initial_data(const std::string& filename);

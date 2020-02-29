@@ -111,9 +111,6 @@ void Population::start_next_generation()
 	// Cross over the rest
 	cross_over();
 
-	// Mutate the cross over children
-	mutate();
-
 	for (auto trip : population_) {
 		new_gen.push_back(trip);
 	}
@@ -121,18 +118,16 @@ void Population::start_next_generation()
 	population_ = new_gen;
 }
 
-void Population::mutate() {
+void Population::mutate(Trip& trip) {
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<> double_dis(0.0, 1.0);
 
-	for (auto& trip : population_) {
-		// Determine whether each trip should mutate
-		auto chance = double_dis(gen);
-		if (chance > 0.5) {
-			std::uniform_int_distribution<> int_dist(0, population_.size() - 1);
-			trip.swap_city(int_dist(gen), int_dist(gen));
-		}
+	// Determine whether trip should mutate
+	auto chance = double_dis(gen);
+	if (chance > 0.5) {
+		std::uniform_int_distribution<> int_dist(0, trip.get_trip_size() - 1);
+		trip.swap_city(int_dist(gen), int_dist(gen));
 	}
 }
 
@@ -160,6 +155,10 @@ void Population::cross_over()
 			population_.at(parent_1).replace_city(c2, i);
 			population_.at(parent_2).replace_city(c1, i);
 		}
+
+		// Mutate the new offspring
+		mutate(population_.at(parent_1));
+		mutate(population_.at(parent_2));
 	}
 
 }
