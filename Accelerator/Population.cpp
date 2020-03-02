@@ -29,7 +29,7 @@ Trip Population::get_initial_data(const std::string& filename)
 
 void Population::report_data()
 {
-	auto fittest = population_.at(get_fittess());
+	auto fittest = population_.at(get_fittess().at(0));
 	fmt::print("Current fittest trip\n");
 	for (auto i = 0; i < fittest.get_trip_size(); i++) {
 		fmt::print("{} ", fittest.get_city(i).value().get_id());
@@ -48,7 +48,7 @@ Population::Population(const std::string& filename, size_t population_size) :
 {
 	population_.reserve(population_size);
 	auto zero_dawn = get_initial_data(filename);
-	for (auto i = 0; i < (population_size - 1); i++) {
+	for (auto i = 0; i < population_size; i++) {
 		zero_dawn.randomize_trip();
 		population_.push_back(zero_dawn);
 	}
@@ -77,7 +77,7 @@ void Population::add_trip(Trip& trip)
 	population_.push_back(trip);
 }
 
-size_t Population::get_fittess()
+std::vector<size_t> Population::get_fittess()
 {
 	std::vector<std::pair<size_t, double>> fitness_table;
 
@@ -91,7 +91,8 @@ size_t Population::get_fittess()
 		return left.second < right.second;
 		});
 
-	return fitness_table.at(fitness_table.size() - 1).first;
+	std::vector<size_t> return_vec{ fitness_table.at(fitness_table.size() - 1).first , fitness_table.at(fitness_table.size() - 2).first };
+	return return_vec;
 }
 
 size_t Population::get_population_size()
@@ -103,10 +104,14 @@ void Population::start_next_generation()
 {
 	// First by selection. Get the fittest trip in this generation
 	auto index = get_fittess();
-	auto fittest = population_.at(index);
+	auto fittest_1 = population_.at(index.at(0));
+	auto fittest_2 = population_.at(index.at(1));
+
 	// Remove the trip from popution
-	population_.erase(population_.begin() + index);
-	std::vector<Trip> new_gen = { fittest };
+	population_.erase(population_.begin() + index.at(0));
+	population_.erase(population_.begin() + index.at(1));
+
+	std::vector<Trip> new_gen = { fittest_1, fittest_2 };
 
 	// Cross over the rest
 	cross_over();
@@ -136,29 +141,87 @@ void Population::cross_over()
 	std::random_device rd;
 	std::mt19937 gen(rd());
 
-	std::uniform_int_distribution<> num_dist(0, population_.size() - 1);
-	// Randomly pick number of trip pair to do cross over
-	auto number_of_pair = num_dist(gen);
+	for (auto index = 0; index < population_.size(); index += 2) {
 
-	for (auto index = 0; index <= number_of_pair; index += 2) {
-		// Randomly pick the pairs
+		std::uniform_int_distribution<> index_dist(0, population_.at(index).get_trip_size() - 1);
+		auto cross_over_index_1 = index_dist(gen);
+		int cross_over_index_2{};
+		do {
+			cross_over_index_2 = index_dist(gen);
+		} while (cross_over_index_2 == cross_over_index_1);
 
-		auto parent_1 = num_dist(gen);
-		auto parent_2 = num_dist(gen);
+		// Swap the index if the cross_over_index_1 is larger
+		if (cross_over_index_1 > cross_over_index_2) {
+			auto temp = cross_over_index_1;
+			cross_over_index_1 = cross_over_index_2;
+			cross_over_index_2 = temp;
+		}
 
-		std::uniform_int_distribution<> index_dist(0, population_.at(parent_1).get_trip_size() - 1);
-		auto cross_over_index = index_dist(gen);
+		Trip child_1{};
+		Trip child_2{};
 
-		for (auto i = 0; i < cross_over_index; i++) {
-			auto c1 = population_.at(parent_1).get_city(i).value();
-			auto c2 = population_.at(parent_2).get_city(i).value();
-			population_.at(parent_1).replace_city(c2, i);
-			population_.at(parent_2).replace_city(c1, i);
+		for (auto i = 0; i < population_.at(index).get_trip_size(); i++) {
+			// Fill the children with empty city and swap the crossover section from parents
+			if (i >= cross_over_index_1 && i <= cross_over_index_2) {
+				child_2.add_city(population_.at(index).get_city(i).value());
+				child_1.add_city(population_.at(index + 1).get_city(i).value());
+			}
+			else {
+				child_2.add_city(City{ 0,0,0 });
+				child_1.add_city(City{ 0,0,0 });
+			}
+		}
+
+		for (auto i = 0; i < population_.at(index).get_trip_size(); i++) {
+			//Iterate over parent 1 to fill up empty spot in child 2
+
+			auto city = population_.at(index).get_city(i).value();
+
+			bool conflicted = false;
+			for (auto j = cross_over_index_1; j <= cross_over_index_2; j++) {
+				if (city.get_id() == child_2.get_city(j).value().get_id()) {
+					conflicted = true;
+					break;
+				}
+			}
+
+			if (!conflicted) {
+				// If there is no conflicted with the swapped section from parent 2
+				// Replace the empty city with city from parent 1
+				child_2.replace_city(city, i);
+			}
+		}
+
+
+		for (auto i = 0; i < population_.at(index + 1).get_trip_size(); i++) {
+			//Iterate over parent 1 to fill up empty spot in child 2
+
+			auto city = population_.at(index + 1).get_city(i).value();
+
+			bool conflicted = false;
+			for (auto j = cross_over_index_1; j <= cross_over_index_2; j++) {
+				if (city.get_id() == child_1.get_city(j).value().get_id()) {
+					conflicted = true;
+					break;
+				}
+			}
+
+			if (!conflicted) {
+				// If there is no conflicted with the swapped section from parent 1
+				// Replace the empty city with city from parent 2
+				child_1.replace_city(city, i);
+			}
+		}
+
+		// Finally replace the parent with children
+		for (auto i = 0; i < population_.at(index).get_trip_size(); i++) {
+			population_.at(index).replace_city(child_2.get_city(i).value(), i);
+			population_.at(index + 1).replace_city(child_1.get_city(i).value(), i);
 		}
 
 		// Mutate the new offspring
-		mutate(population_.at(parent_1));
-		mutate(population_.at(parent_2));
+		mutate(population_.at(index));
+		mutate(population_.at(index + 1));
 	}
 }
 

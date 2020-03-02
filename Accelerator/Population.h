@@ -27,6 +27,6 @@ private:
 	void cross_over();
 	std::vector<std::string> split_string(const std::string& input);
 	Trip get_initial_data(const std::string& filename);
-	size_t get_fittess();
+	std::vector<size_t> get_fittess();
 	size_t get_population_size();
 };

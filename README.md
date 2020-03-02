@@ -24,3 +24,8 @@ The program will start with a set of solutions (randomly generated routes betwee
 
 ## Notes
 This project is extremely inefficient and incredibly slow. Don't run large dataset with high number of member and generation.
+
+## Links
+
+1. [Genetic Algorithm for Traveling Salesman Problem with Modified Cycle Crossover Operator](https://www.hindawi.com/journals/cin/2017/7430125/)
+2. [Introduction to Genetic Algorithms — Including Example Code](https://towardsdatascience.com/introduction-to-genetic-algorithms-including-example-code-e396e98d8bf3)

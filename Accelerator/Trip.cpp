@@ -13,7 +13,7 @@ std::optional<City> Trip::get_city(size_t index)
 	return trip_.at(index);
 }
 
-bool Trip::insert_city(City& city, size_t index)
+bool Trip::insert_city(City city, size_t index)
 {
 	if (index > trip_.size()) {
 		return false;
@@ -23,7 +23,7 @@ bool Trip::insert_city(City& city, size_t index)
 	return true;
 }
 
-bool Trip::replace_city(City& city, size_t index)
+bool Trip::replace_city(City city, size_t index)
 {
 	if (index > trip_.size()) {
 		return false;
@@ -33,7 +33,7 @@ bool Trip::replace_city(City& city, size_t index)
 	return true;
 }
 
-void Trip::add_city(City& city)
+void Trip::add_city(City city)
 {
 	trip_.push_back(city);
 }

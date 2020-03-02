@@ -17,4 +17,3 @@ public:
 	size_t get_id();
 	double distance_to(const City& another);
 };
-
