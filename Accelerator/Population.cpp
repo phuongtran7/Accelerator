@@ -11,11 +11,8 @@ Trip Population::get_initial_data(const std::string& filename)
 		if (!found_node_section) {
 			if (line == "NODE_COORD_SECTION") {
 				found_node_section = true;
-				continue;
 			}
-			else {
-				continue;
-			}
+			continue;
 		}
 
 		auto tokens = split_string(line);
