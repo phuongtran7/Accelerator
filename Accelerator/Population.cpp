@@ -21,6 +21,7 @@ Trip Population::get_initial_data(const std::string& filename)
 			new_trip.add_city(city);
 		}
 	}
+	infile.close();
 	return new_trip;
 }
 
