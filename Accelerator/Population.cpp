@@ -23,6 +23,7 @@ Trip Population::get_initial_data(const std::string& filename)
 	}
 	infile.close();
 
+	// Set the range for the axes
 	x_range_ = new_trip.get_x_range();
 	y_range_ = new_trip.get_y_range();
 

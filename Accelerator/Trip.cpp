@@ -84,6 +84,7 @@ double Trip::get_total_distance()
 }
 
 std::pair<double, double> Trip::get_x_range() {
+	// Sort the cities base on X value in ascending order
 	std::sort(trip_.begin(), trip_.end(),
 		[](auto& a, auto& b) -> bool
 		{
@@ -96,6 +97,7 @@ std::pair<double, double> Trip::get_x_range() {
 }
 
 std::pair<double, double> Trip::get_y_range() {
+	// Sort the cities base on Y value in ascending order
 	std::sort(trip_.begin(), trip_.end(),
 		[](auto& a, auto& b) -> bool
 		{

@@ -12,6 +12,7 @@ private:
 	std::vector<City> trip_;
 
 private:
+	// Round down the starting point and round up the ending point
 	template <typename Type>
 	void round_range(std::pair<Type, Type>& input) {
 		auto first = input.first;
