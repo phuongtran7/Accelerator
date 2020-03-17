@@ -82,3 +82,27 @@ double Trip::get_total_distance()
 	}
 	return 0.0;
 }
+
+std::pair<double, double> Trip::get_x_range() {
+	std::sort(trip_.begin(), trip_.end(),
+		[](auto& a, auto& b) -> bool
+		{
+			return a.get_x() < b.get_x();
+		});
+
+	auto range = std::make_pair(trip_.at(0).get_x(), trip_.at(trip_.size() - 1).get_x());
+	round_range(range);
+	return range;
+}
+
+std::pair<double, double> Trip::get_y_range() {
+	std::sort(trip_.begin(), trip_.end(),
+		[](auto& a, auto& b) -> bool
+		{
+			return a.get_y() < b.get_y();
+		});
+
+	auto range = std::make_pair(trip_.at(0).get_y(), trip_.at(trip_.size() - 1).get_y());
+	round_range(range);
+	return range;
+}

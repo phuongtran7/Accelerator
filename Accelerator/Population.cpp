@@ -22,6 +22,10 @@ Trip Population::get_initial_data(const std::string& filename)
 		}
 	}
 	infile.close();
+
+	x_range_ = new_trip.get_x_range();
+	y_range_ = new_trip.get_y_range();
+
 	return new_trip;
 }
 
@@ -34,15 +38,29 @@ void Population::report_data()
 	}
 	fmt::print("\nTrip lenght: {}", fittest.get_total_distance());
 	fmt::print("\n\n");
+	concurrency::asend(target_, fittest);
 }
 
-Population::Population(const std::string& filename) :
-	Population(filename, 50) // Default to 50 member in a population
+std::pair<double, double> Population::get_x_range()
+{
+	return x_range_;
+}
+
+std::pair<double, double> Population::get_y_range()
+{
+	return y_range_;
+}
+
+Population::Population(const std::string& filename, concurrency::ITarget<Trip>& target) :
+	Population(filename, 50, target) // Default to 50 member in a population
 {
 }
 
-Population::Population(const std::string& filename, size_t population_size) :
-	population_{}
+Population::Population(const std::string& filename, size_t population_size, concurrency::ITarget<Trip>& target) :
+	population_{},
+	target_(target),
+	x_range_{},
+	y_range_{}
 {
 	population_.reserve(population_size);
 	auto zero_dawn = get_initial_data(filename);

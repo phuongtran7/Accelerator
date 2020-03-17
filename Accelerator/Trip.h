@@ -11,6 +11,16 @@ class Trip
 private:
 	std::vector<City> trip_;
 
+private:
+	template <typename Type>
+	void round_range(std::pair<Type, Type>& input) {
+		auto first = input.first;
+		auto second = input.second;
+
+		input.first = ((first - 99) / 100) * 100;
+		input.second = ((second + 99) / 100) * 100;
+	}
+
 public:
 	Trip();
 	~Trip() = default;
@@ -23,5 +33,7 @@ public:
 	bool swap_city(size_t first, size_t second);
 	size_t get_trip_size();
 	double get_total_distance();
+	std::pair<double, double> get_x_range();
+	std::pair<double, double> get_y_range();
 };
 
