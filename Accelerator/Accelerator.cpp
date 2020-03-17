@@ -62,34 +62,37 @@ int main()
 	std::cin >> gen_size;
 	std::cin.get();
 
+	// Buffer that used to pass the data between calculation thread and drawing thread
 	concurrency::overwrite_buffer<Trip> buffer;
 
 	Population Nora(file_name, pop_size, buffer);
 
+	// Get the rounded ranges for x and y axis
 	auto x_range = Nora.get_x_range();
 	auto y_range = Nora.get_y_range();
 
+	std::thread calculation_thread([&] 
+		{
+			auto t1 = std::chrono::high_resolution_clock::now();
+			for (auto i = 0; i < gen_size; i++) {
+				Nora.report_data();
+				Nora.start_next_generation();
+			}
+			auto t2 = std::chrono::high_resolution_clock::now();
+			auto duration = (t2 - t1);
 
-	std::thread calculation_thread([&] {
-		auto t1 = std::chrono::high_resolution_clock::now();
-		for (auto i = 0; i < gen_size; i++) {
-			Nora.report_data();
-			Nora.start_next_generation();
-		}
-		auto t2 = std::chrono::high_resolution_clock::now();
-		auto duration = (t2 - t1);
+			auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
+			duration -= minutes;
+			auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
 
-		auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
-		duration -= minutes;
-		auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
-
-		fmt::print("Complete in {} minutes {} seconds.\n", minutes.count(), seconds.count());
+			fmt::print("Complete in {} minutes {} seconds.\n", minutes.count(), seconds.count());
 		}
 	);
 
 
 	sf::RenderWindow window(sf::VideoMode(550, 550), "Othinus ");
 
+	// Axes
 	sf::RectangleShape horizontal(sf::Vector2f(515, 5.f));
 	sf::RectangleShape vertical(sf::Vector2f(515, 5.f));
 	vertical.rotate(90);
@@ -120,6 +123,7 @@ int main()
 
 				auto current_city = fittest_trip.get_city(i).value();
 
+				// Map the City's X and Y value in the window X, Y axis
 				auto mapped_X = map_value(current_city.get_x(), x_range.first, x_range.second, 5.0, 500.0);
 				auto mapped_Y = map_value(current_city.get_y(), y_range.first, y_range.second, 10.0, 500.0);
 
@@ -146,7 +150,6 @@ int main()
 		}
 
 		window.display();
-
 	}
 
 	calculation_thread.join();
