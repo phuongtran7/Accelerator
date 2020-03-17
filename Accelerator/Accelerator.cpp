@@ -143,9 +143,10 @@ int main()
 					window.draw(line, 2, sf::Lines);
 				}
 			}
-
-			window.display();
 		}
+
+		window.display();
+
 	}
 
 	calculation_thread.join();
