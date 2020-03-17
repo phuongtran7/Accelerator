@@ -16,8 +16,8 @@ The program will start with a set of solutions (randomly generated routes betwee
 ### Windows
 1. The project  uses [{fmt}](https://github.com/fmtlib/fmt/) library for formating output. The library can be easily installed with Microsoft's [vcpkg](https://github.com/Microsoft/vcpkg).
     * `vcpkg install fmt`
-2. Download and extract [SFML](https://www.sfml-dev.org/download.php) library. Adjust `include` and `lib` directory.
-3. Clone the project: `git clone https://github.com/phuongtran7/Accelerator`.
+2. Clone the project: `git clone https://github.com/phuongtran7/Accelerator`.
+3. Download and extract [SFML](https://www.sfml-dev.org/download.php) library. Adjust `include` and `lib` directory of the project.
 4. Open project's `Property Pages` in Visual Studio. Select `Debugging`, adjust the `Enviroment` to point to the `bin` directory of SFML.
 5. Build the project with Visual Studio.
 
