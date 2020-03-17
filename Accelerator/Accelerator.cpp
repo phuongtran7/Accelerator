@@ -89,8 +89,7 @@ int main()
 		}
 	);
 
-
-	sf::RenderWindow window(sf::VideoMode(550, 550), "Othinus ");
+	sf::RenderWindow window(sf::VideoMode(550, 550), "Othinus");
 
 	// Axes
 	sf::RectangleShape horizontal(sf::Vector2f(515, 5.f));
