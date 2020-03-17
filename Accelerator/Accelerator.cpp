@@ -88,7 +88,7 @@ int main()
 	);
 
 
-	sf::RenderWindow window(sf::VideoMode(550, 550), "Abathur");
+	sf::RenderWindow window(sf::VideoMode(550, 550), "Othinus ");
 
 	sf::RectangleShape horizontal(sf::Vector2f(515, 5.f));
 	sf::RectangleShape vertical(sf::Vector2f(515, 5.f));
